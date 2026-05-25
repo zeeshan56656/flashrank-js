@@ -7,6 +7,10 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) an
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-05-25
+
+First public release on npm.
+
 ### Fixed (pre-publish bug-fix sprint, 2026-05-25)
 - `topN: 0` now correctly returns an empty array (previously silently returned all documents).
 - `topN` is now strictly validated as a non-negative integer (was accepting non-integer values like `1.5`).
@@ -28,11 +32,7 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) an
 - `bge-v2-m3` (571 MB multilingual SOTA-small) verified loading and ranking end-to-end. English match scored 0.985, Spanish cross-lingual match 0.067 — meaningfully better than `bge-base`'s 0.880 / 0.038 on the same task.
 - `examples/bge-v2-m3-smoke.ts` for users to reproduce the verification.
 
-## [0.1.0] - 2026-05-25
-
-Initial scaffolding release. API may still change before `1.0.0` — pin exact versions if you depend on it.
-
-### Added
+### Added (initial scaffolding)
 - `Reranker` class with static `Reranker.create({ model })` factory and instance `.rerank({ query, documents, topN, returnDocuments })` method.
 - Built-in model registry: `tiny`, `mini` (default), `bge-base`, `bge-v2-m3`, `bge-large`.
 - Per-model `defaultDtype` so BGE multilingual models load their quantized variant by default instead of the >1 GB fp32 + external-data variant.
@@ -46,7 +46,7 @@ Initial scaffolding release. API may still change before `1.0.0` — pin exact v
 - GitHub Actions CI on Node 20 + 22.
 - MIT license.
 
-### Notes
+### Notes (initial scaffolding journey)
 - Default model changed from `bge-v2-m3` to `mini` during initial bring-up after discovering the BGE-v2-m3 repo ships an fp32 model + 2.27 GB external weights file that transformers.js doesn't auto-fetch reliably. `mini` is 23 MB, loads cleanly out of the box, and gives a great first-run experience. Multilingual users opt in to `bge-v2-m3` / `bge-base` explicitly.
 - Removed the `quantized` option from `RerankerOptions` — it was the transformers.js v2 API and is a no-op in v3. Use `dtype` instead.
 - BGE multilingual models use `defaultDtype: "q8"` so they load `model_quantized.onnx` (~280–571 MB depending on model) instead of the >1 GB fp32 + external-data variant.
